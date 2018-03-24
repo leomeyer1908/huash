@@ -1,0 +1,21 @@
+{
+  "name": "huash",
+  "version": "0.0.1",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.13.4",
+    "socket.io": "1.4.8"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huashio/huash.git"
+  },
+  "author": "huashio",
+  "bugs": {
+    "url": "https://github.com/huashio/huash/issues"
+  },
+  "homepage": "https://github.com/huashio/huash#readme"
+}
