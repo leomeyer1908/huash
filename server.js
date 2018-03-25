@@ -3,10 +3,11 @@ var express = require('express'),
     app = express(),
     http = require("http").createServer(app),
     socket = require("socket.io"),
-    io = socket.listen(http);
-gameSocket = io.of('game');
+    io = socket.listen(http),
+    gameSocket = io.of('game'),
 	loginSocket = io.of('login');
-var port = 8080,
+	
+var port = 80,
     ip   = '0.0.0.0';
 
 app.use(express.static('public'));
@@ -113,6 +114,7 @@ io.sockets.on('connection', function(socket) {
     socket.on("health", function(co) {
 		if (players[co].points > 0) {
 			players[co].tHealth += 1;
+			players[co].health += 1;
 			players[co].points -= 1;
 			players[co].mass += 1;
 		}
@@ -161,11 +163,16 @@ io.sockets.on('connection', function(socket) {
 	        }
         }
 	});
-
 	function loseHealth(a, co){
-		players[a].health -= players[a].tHealth/(players[a].tHealth - players[co].damage);
+		if (players[a].tHealth > players[co].damage) {
+			players[a].health -= players[a].tHealth/(players[a].tHealth - players[co].damage);
+		} else {
+			players[a].health = 0;
+		}
+		console.log("thealth: " + players[a].tHealth)
+		console.log("health: " + players[a].health)
 		//death
-		if (players[a].health < 1) {
+		if (players[a].health <= 0) {
 			players[co].points += Math.round((players[a].mass + players[a].points) - 40);
 			delete players[a];
 			console.log(players);
