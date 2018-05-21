@@ -1,0 +1,47 @@
+body, html {
+    position:fixed;
+    background-color: black;
+	overflow: visible;
+	margin: 0px;
+	z-index = -2;
+}
+
+canvas {
+	position:fixed;
+	left:0;
+	top:0;
+	transform:translate(0%, 0%) scale(1);
+	z-index: -1;
+	display:none
+}
+
+#userName {
+    display: none;
+	text-align: center;
+	padding: 0;
+}
+#userName:focus {
+	outline: none;
+}
+#userName.placeholder {
+    text-align: center;
+}
+
+#submit {
+	display: none;
+	padding: 0;
+	outline: none;
+	cursor: pointer;
+	color: #000000;
+	background-color: #F0E0D0;
+	box-shadow: 0 10px #A09080;
+	font-size: 24px;
+}
+#submit:hover {
+	background-color: #D0C0B0;
+}
+#submit:active {
+	background-color: #D0C0B0;
+    box-shadow: 0 5px #706050;
+    transform: translateY(4px);
+}

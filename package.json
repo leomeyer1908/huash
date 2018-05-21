@@ -1,21 +1,27 @@
 {
   "name": "huash",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "description": "Click other players to kill them.",
   "main": "server.js",
-  "dependencies": {
-    "express": "^4.13.4",
-    "socket.io": "1.4.8"
-  },
   "scripts": {
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/huashio/huash.git"
   },
-  "author": "huashio",
+  "author": "huash",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/huashio/huash/issues"
   },
-  "homepage": "https://github.com/huashio/huash#readme"
+  "homepage": "https://github.com/huashio/huash#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "socket.io": "^2.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.2"
+  }
 }
