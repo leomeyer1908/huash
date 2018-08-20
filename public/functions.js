@@ -50,10 +50,10 @@ var loginClick = function(event){
     socket.emit("spawn", playerName);
 };
 
-var gameKeydown = function(e) {    
+var gameKeydown = function(e) {
     if (e.keyCode == 38 || e.keyCode == 87) {
         socket.emit("up", co);
-    } if (e.keyCode == 40 || e.keyCode == 83) { 
+    } if (e.keyCode == 40 || e.keyCode == 83) {
         socket.emit("down", co);
     } if (e.keyCode == 37 || e.keyCode == 65) {
         socket.emit("left", co);
@@ -64,10 +64,10 @@ var gameKeydown = function(e) {
     }
 };
 
-var gameKeyup = function(e) {  
+var gameKeyup = function(e) {
     if (e.keyCode == 38 || e.keyCode == 87) {
         socket.emit("up2", co);
-    } if (e.keyCode == 40 || e.keyCode == 83) { 
+    } if (e.keyCode == 40 || e.keyCode == 83) {
         socket.emit("down2", co);
     } if (e.keyCode == 37 || e.keyCode == 65) {
         socket.emit("left2", co);
@@ -97,7 +97,7 @@ var gameMousedown = function(e) {
                 }
                 if (smouseX > document.documentElement.clientWidth/2 - 30 - curveCount && smouseX < document.documentElement.clientWidth/2 + 30 + curveCount) {
                     socket.emit("damage", co);
-                } 
+                }
                 if (smouseX > document.documentElement.clientWidth/2 + 80 - curveCount && smouseX < document.documentElement.clientWidth/2 + 140 + curveCount) {
                     socket.emit("speed", co);
                 }
@@ -141,23 +141,25 @@ function rand(value) {
     return Math.random()*value;
 }
 
-function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
+function orderLeaderboard(array) {
+    var currentIndex = array.length,
+        temporaryValue,
+        randomIndex;
 
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
 
-    // Pick a remaining element...
-    randomIndex = Math.floor(rand(currentIndex));
-    currentIndex -= 1;
+      // Pick a remaining element...
+      randomIndex = Math.floor(rand(currentIndex));
+      currentIndex -= 1;
 
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
 
-  return array;
+    return array;
 }
 
 window.getWidthOfText = function(txt, fontname, fontsize){
@@ -180,43 +182,38 @@ function drawImageRot(img,x,y,width,height,deg){
     ctx.translate((x + width / 2) * (-1), (y + height / 2) * (-1));
 }
 
-function drawCurvedRect(rectWidth,rectHeight,rectX,rectY,cornerRadius,color) {
-    ctx.beginPath();
-    ctx.moveTo(rectX + cornerRadius, rectY);
-    ctx.lineTo(rectX + rectWidth - cornerRadius, rectY);
-    ctx.arcTo(rectX + rectWidth, rectY, rectX + rectWidth, rectY + cornerRadius, cornerRadius);
-    ctx.lineTo(rectX + rectWidth, rectY + rectHeight - cornerRadius);
-    ctx.arcTo(rectX + rectWidth, rectY + rectHeight, rectX + rectWidth - cornerRadius, rectY + rectHeight, cornerRadius);
-	  ctx.lineTo(rectX + cornerRadius, rectY + rectHeight);
-	  ctx.arcTo(rectX, rectY + rectHeight, rectX, rectY + rectHeight - cornerRadius, cornerRadius);
-	  ctx.lineTo(rectX, rectY + cornerRadius);
-	  ctx.arcTo(rectX, rectY, rectX + cornerRadius, rectY, cornerRadius);
-    ctx.lineWidth = 5;
-	ctx.strokeStyle = "rgba(0,0,0, 0.1)";
-    ctx.stroke();
-	  for (var rectCount = 2; rectCount < rectWidth/2; rectCount += 5) {
+function drawSkillRect(rectWidth, rectHeight, rectX, rectY, cornerRadius, color) {
+	  for (var i = 2; i < rectWidth/2; i += 5) {
 	      ctx.beginPath();
-        ctx.moveTo(rectX + cornerRadius + rectCount, rectY + rectCount);
-        ctx.lineTo(rectX + rectWidth - cornerRadius - rectCount, rectY + rectCount);
-        ctx.arcTo(rectX + rectWidth - rectCount, rectY + rectCount, rectX + rectWidth - rectCount, rectY + cornerRadius + rectCount, cornerRadius);
-        ctx.lineTo(rectX + rectWidth - rectCount, rectY + rectHeight - cornerRadius - rectCount);
-	      ctx.arcTo(rectX + rectWidth - rectCount, rectY + rectHeight - rectCount, rectX + rectWidth - cornerRadius - rectCount, rectY + rectHeight - rectCount, cornerRadius);
-	      ctx.lineTo(rectX + cornerRadius + rectCount, rectY + rectHeight - rectCount);
-	      ctx.arcTo(rectX + rectCount, rectY + rectHeight - rectCount, rectX + rectCount, rectY + rectHeight - cornerRadius - rectCount, cornerRadius);
-	      ctx.lineTo(rectX + rectCount, rectY + cornerRadius + rectCount);
-	      ctx.arcTo(rectX + rectCount, rectY + rectCount, rectX + cornerRadius + rectCount, rectY + rectCount, cornerRadius);
+        ctx.moveTo(rectX + cornerRadius + i, rectY + i);
+        ctx.lineTo(rectX + rectWidth - cornerRadius - i, rectY + i);
+        ctx.arcTo(rectX + rectWidth - i, rectY + i, rectX + rectWidth - i, rectY + cornerRadius + i, cornerRadius);
+        ctx.lineTo(rectX + rectWidth - i, rectY + rectHeight - cornerRadius - i);
+	      ctx.arcTo(rectX + rectWidth - i, rectY + rectHeight - i, rectX + rectWidth - cornerRadius - i, rectY + rectHeight - i, cornerRadius);
+	      ctx.lineTo(rectX + cornerRadius + i, rectY + rectHeight - i);
+	      ctx.arcTo(rectX + i, rectY + rectHeight - i, rectX + i, rectY + rectHeight - cornerRadius - i, cornerRadius);
+	      ctx.lineTo(rectX + i, rectY + cornerRadius + i);
+	      ctx.arcTo(rectX + i, rectY + i, rectX + cornerRadius + i, rectY + i, cornerRadius);
         ctx.lineWidth = 5;
-	      if (color == "red") {
-	          ctx.strokeStyle = "rgba(255, 0, 0, 0.1)";
-	      } else if (color == "green") {
-	          ctx.strokeStyle = "rgba(0, 255, 0, 0.1)";
-	      } else if (color == "blue") {
-	          ctx.strokeStyle = "rgba(0, 0, 255, 0.1)";
-	      }
+        ctx.strokeStyle = color;
         ctx.stroke();
 	  }
 }
 
+CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r, c) {
+  if (w < 2 * r) r = w / 2;
+  if (h < 2 * r) r = h / 2;
+  this.beginPath();
+  this.moveTo(x+r, y);
+  this.arcTo(x+w, y,   x+w, y+h, r);
+  this.arcTo(x+w, y+h, x,   y+h, r);
+  this.arcTo(x,   y+h, x,   y,   r);
+  this.arcTo(x,   y,   x+w, y,   r);
+  this.strokeStyle = c;
+  this.fillStyle = c;
+  this.closePath();
+  return this;
+}
 
 function drawPlayer(x,y,mass,color) {
     //body
@@ -285,7 +282,7 @@ function backgroundPoints(width1, height1, width2, height2, numPoint) {
             ctx.arc(bPoints[i][0], bPoints[i][1], bPoints[i][2], 0, 2*Math.PI);
             ctx.fillStyle = "white";
             ctx.fill();
-            ctx.lineWidth = 0;
+            ctx.lineWidth = 1;
             ctx.stroke();
         }
     }
@@ -312,9 +309,9 @@ function energyBall(x,y,radius,c,type,id,sp) {
             energy[type][id].shift();
         }
         for (var j = 0; j < energy[type][id].length; j++) {
-            energy[type][id][j].x += x - energy[type][id][j].ox; 
+            energy[type][id][j].x += x - energy[type][id][j].ox;
             energy[type][id][j].ox = x;
-            energy[type][id][j].y += y - energy[type][id][j].oy; 
+            energy[type][id][j].y += y - energy[type][id][j].oy;
             energy[type][id][j].oy = y;
         }
     }
@@ -350,7 +347,7 @@ function edgeFix() {
     if (userPosX - clientWidth/2 < 0) {
         if (mouseX < 0) {
             mouseX += mapX;
-        } 
+        }
         for (var i = 0; i < energyOrbs.length; i++) {
             if (energyOrbs[i].x > mapX - clientWidth/2) {
                 energyOrbs[i].x -= mapX;
@@ -368,7 +365,7 @@ function edgeFix() {
     if (userPosX + clientWidth/2 > mapX) {
         if (mouseX > mapX) {
             mouseX -= mapX;
-        } 
+        }
         for (var i = 0; i < energyOrbs.length; i++) {
             if (energyOrbs[i].x < 0 + clientWidth/2) {
                 energyOrbs[i].x += mapX;
@@ -386,7 +383,7 @@ function edgeFix() {
     if (userPosY - clientHeight/2 < 0) {
         if (mouseY < 0) {
             mouseY += mapY;
-        } 
+        }
         for (var i = 0; i < energyOrbs.length; i++) {
             if (energyOrbs[i].y > mapY - clientHeight/2) {
                 energyOrbs[i].y -= mapY;
@@ -404,7 +401,7 @@ function edgeFix() {
     if (userPosY + clientHeight/2 > mapY) {
         if (mouseY > mapY) {
             mouseY -= mapY;
-        } 
+        }
         for (var i = 0; i < energyOrbs.length; i++) {
             if (energyOrbs[i].y < 0 + clientHeight/2) {
                 energyOrbs[i].y += mapY;
@@ -419,22 +416,3 @@ function edgeFix() {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

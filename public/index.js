@@ -175,7 +175,7 @@ function gameLoop() {
             speedY2--;
         }
     }
-    
+
 
     backgroundPoints(-clientWidth, -clientHeight, clientWidth*2, clientHeight*2, 300);
     for (var i = 0; i < bPoints.length; i++) {
@@ -187,7 +187,7 @@ function gameLoop() {
 
     for (var i = 0; i < energyOrbs.length; i++) {
         energyBall(clientWidth/2 + energyOrbs[i].x-userPosX, clientHeight/2 - energyOrbs[i].y+userPosY, 7.5, energyOrbs[i].color, "currency", i, 30);
-    } 
+    }
     ctx.font="16px arial";
     ctx.fillStyle="rgba(255,255,255,0.8)";
     ctx.fillText(playerName,
@@ -208,7 +208,7 @@ function gameLoop() {
             ctx.fillStyle="rgba(255,255,255,0.8)";
             ctx.fillText(users[i].name,
                 clientWidth/2 - Math.round(getWidthOfText(users[i].name, "arial", "16px")/2 + userPosX - users[i].x),
-                clientHeight/2 - users[i].mass/2 - users[i].mass/10 - users[i].y + userPosY 
+                clientHeight/2 - users[i].mass/2 - users[i].mass/10 - users[i].y + userPosY
             );
         }
     }
@@ -232,9 +232,9 @@ function gameLoop() {
             toggleSkill = false;
         }
     }
-    drawCurvedRect(100,100,document.documentElement.clientWidth/2 - 160,10 - moveSkill,20,"red");       
-    drawCurvedRect(100,100,document.documentElement.clientWidth/2 - 50,10 - moveSkill,20,"green");
-    drawCurvedRect(100,100,document.documentElement.clientWidth/2 + 60,10 - moveSkill,20,"blue");
+    drawSkillRect(100,100,document.documentElement.clientWidth/2 - 160,10 - moveSkill,20,"rgba(255, 0, 0, 0.1)");
+    drawSkillRect(100,100,document.documentElement.clientWidth/2 - 50,10 - moveSkill,20,"rgba(0, 255, 0, 0.1)");
+    drawSkillRect(100,100,document.documentElement.clientWidth/2 + 60,10 - moveSkill,20,"rgba(0, 0, 255, 0.1)");
     ctx.fillStyle = "rgba(255,255,255,0.8)";
     ctx.font = "20px Arial";
     ctx.fillText("Health",document.documentElement.clientWidth/2 - 140,33 - moveSkill);
@@ -256,7 +256,7 @@ function gameLoop() {
             if (smouseX > document.documentElement.clientWidth/2 + 60 && smouseX < document.documentElement.clientWidth/2 + 160) {
                 canvas.style.cursor = "pointer";
             }
-        } 
+        }
         for (var curveCount = 0; curveCount < 21; curveCount++) {
             if (smouseY == 10 + curveCount) {
                 if (smouseX > document.documentElement.clientWidth/2 - 140 - curveCount && smouseX < document.documentElement.clientWidth/2 - 80 + curveCount) {
@@ -264,7 +264,7 @@ function gameLoop() {
                 }
                 if (smouseX > document.documentElement.clientWidth/2 - 30 - curveCount && smouseX < document.documentElement.clientWidth/2 + 30 + curveCount) {
                     canvas.style.cursor = "pointer";
-                } 
+                }
                 if (smouseX > document.documentElement.clientWidth/2 + 80 - curveCount && smouseX < document.documentElement.clientWidth/2 + 140 + curveCount) {
                     canvas.style.cursor = "pointer";
                 }
@@ -284,8 +284,14 @@ function gameLoop() {
             }
         }
     }
+    //leaderboard
+    ctx.roundRect(clientWidth*0.84,clientHeight*0.01,clientWidth*0.15,clientHeight*0.4,4,"rgba(100,100,100,0.6)").fill();
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "black";
+    ctx.fillText("Leaderboard",window.getWidthOfText("Leaderboard", "arial", "20px")*0.42 + clientWidth*0.84,clientHeight*0.05);
     //show position
     ctx.font = "25px ComicSans";
+    ctx.fillStyle = "rgba(255,255,255,0.8)";
     ctx.fillText("X: ".split("").join(String.fromCharCode(8202)) + userPosX, 10, 25);
     ctx.fillText("Y: ".split("").join(String.fromCharCode(8202)) + userPosY, 10, 50);
-} 
+}

@@ -6,8 +6,8 @@ var express = require('express'),
     io = socket.listen(http),
     gameSocket = io.of('game'),
 	loginSocket = io.of('login');
-	
-var port = 8080,
+
+var port = 8000,
     ip   = '0.0.0.0';
 
 app.use(express.static('public'));
@@ -19,8 +19,8 @@ console.log('Server running on http://%s:%s', ip, port);
 //server code
 
 var players = [],
-mapX = 1840,
-mapY = 1840,
+mapX = 3680,
+mapY = 3680,
 energyOrbs = [];
 
 function generateOrbs() {
@@ -28,15 +28,15 @@ function generateOrbs() {
 	var y = Math.random() * mapY;
 	var skill = ["health","damage","speed"]
 	this.x = parseInt(x);
-    this.y = parseInt(y);
-    this.speedX = 0;
+  this.y = parseInt(y);
+  this.speedX = 0;
 	this.speedY = 0;
 	this.skill = skill[Math.floor(Math.random()*(skill.length))]
 	this.skill = Math.floor(Math.random()*Math.pow(skill.length, 2)) == 0 ? "all" : this.skill;
-	this.color = 
+	this.color =
 		(this.skill == "health") ? "rgba(255,0,0,0.1)" :
 		(this.skill == "damage") ? "rgba(0,255,0,0.1)" :
-		(this.skill == "speed") ? "rgba(0,0,255,0.2)" : 
+		(this.skill == "speed") ? "rgba(0,0,255,0.2)" :
 		"rgba(255,255,255,0.2)";
 
 	return {"x":this.x, "y":this.y, "speedX":this.speedX, "speedY":this.speedY, "skill":this.skill, "color":this.color};
@@ -61,19 +61,22 @@ function newPlayer(playerName) {
     this.x = parseInt(x);
     this.y = parseInt(y);
     this.id = id;
-	this.speedX = 0;
-	this.speedY = 0;
-	this.moveX = 0;
-	this.moveY = 0;
+	  this.speedX = 0;
+	  this.speedY = 0;
+	  this.moveX = 0;
+	  this.moveY = 0;
     this.mass = 40;
     this.points = 0;
-	this.health = 1;
-	this.tHealth = 1;
-	this.speed = 1;
-	this.damage = 1;
-	this.kills;
-	this.name = playerName;
-    return {"x":this.x, "y":this.y, "id":this.id, "speedX":this.speedX, "speedY":this.speedY, "up":this.up, "down":this.down, "left":this.left, "right":this.right, "mass":this.mass, "health":this.health, "tHealth":this.tHealth, "points":this.points, "speed":this.speed, "damage":this.damage, "name":this.name};
+	  this.health = 1;
+	  this.tHealth = 1;
+  	this.speed = 1;
+	  this.damage = 1;
+	  this.kills = 0;
+  	this.name = playerName;
+    return {"x":this.x, "y":this.y, "id":this.id, "speedX":this.speedX, "speedY":this.speedY,
+    "up":this.up, "down":this.down, "left":this.left, "right":this.right, "mass":this.mass,
+    "health":this.health, "tHealth":this.tHealth, "points":this.points, "speed":this.speed,
+    "damage":this.damage, "kills":this.kills, "name":this.name};
 }
 io.sockets.on('connection', function(socket) {
 	socket.emit("load");
@@ -107,7 +110,7 @@ io.sockets.on('connection', function(socket) {
 	            players[co].moveY = -2;
 			}
 		}
-	}) 
+	})
 	socket.on("left", function(co){
 		if (players[co] != undefined) {
 			if (players[co].moveX != 1 && players[co].moveX != -2) {
@@ -116,7 +119,7 @@ io.sockets.on('connection', function(socket) {
 	            players[co].moveX = -2;
 	        }
 	    }
-	}) 
+	})
 	socket.on("right", function(co){
 		if (players[co] != undefined) {
 			if (players[co].moveX != -1 && players[co].moveX != 2) {
@@ -125,7 +128,7 @@ io.sockets.on('connection', function(socket) {
 	            players[co].moveX = 2;
 			}
 		}
-	}) 
+	})
 
 	socket.on("up2", function(co){
 		if (players[co] != undefined) {
@@ -144,7 +147,7 @@ io.sockets.on('connection', function(socket) {
 	            players[co].moveY = 1;
 			}
 		}
-	}) 
+	})
 	socket.on("left2", function(co){
 		if (players[co] != undefined) {
 	        if (players[co].moveX == -1) {
@@ -153,7 +156,7 @@ io.sockets.on('connection', function(socket) {
 	            players[co].moveX = 1;
 	        }
 	    }
-	}) 
+	})
     socket.on("right2", function(co){
     	if (players[co] != undefined) {
 	        if (players[co].moveX == 1) {
@@ -163,7 +166,7 @@ io.sockets.on('connection', function(socket) {
 	        }
 	    }
 	})
-    
+
     //skills
     socket.on("health", function(co) {
     	if (players[co] != undefined) {
@@ -210,6 +213,7 @@ io.sockets.on('connection', function(socket) {
 						//death
 					if (players[i].health <= 0) {
 						players[co].points += Math.round((players[i].mass - 40)/2);
+            players[co].kills += 1;
 						delete players[i];
 						//players.splice(i, 1);
 						console.log(players);
@@ -236,10 +240,10 @@ io.sockets.on('connection', function(socket) {
             }
 		}
 	});
-	
+
 	socket.on('updateGame', function() {
 		socket.emit("update", players, energyOrbs, mapX, mapY);
-	}) 
+	})
 })
 setInterval(serverLoop, 1000/60)
 function serverLoop() {
@@ -249,11 +253,11 @@ function serverLoop() {
 		}
 	}
 	if (players.length >= 50) {
-		mapX = 10000;
-		mapY = 10000;
+		mapX = 20000;
+		mapY = 20000;
 	} else {
-		mapX = 1840 + players.length*160;
-		mapY = 1840 + players.length*160;
+		mapX = 3680 + players.length*320;
+		mapY = 3680 + players.length*320;
 	}
 	if (energyOrbs.length < mapX/400 + mapY/150) {
 		for (var i = 0; i < mapX/400 + mapY/150 + -energyOrbs.length; i++) {
@@ -265,7 +269,7 @@ function serverLoop() {
 	for (var i = 0; i < energyOrbs.length; i++) {
         energyOrbs[i].speedX += (Math.floor(Math.random()*3) - 1)/30;
         energyOrbs[i].speedY += (Math.floor(Math.random()*3) - 1)/30;
-        
+
 		energyOrbs[i].x += energyOrbs[i].speedX;
 		energyOrbs[i].y += energyOrbs[i].speedY;
 
@@ -331,4 +335,4 @@ function serverLoop() {
 	    	}
 		}
 	}
-} 
+}
