@@ -72,7 +72,7 @@ function newPlayer(playerName) {
   	this.speed = 1;
 	  this.damage = 1;
 	  this.kills = 0;
-  	this.name = playerName;
+  	playerName == "" ? this.name = "Unnamed" : this.name = playerName;
     return {"x":this.x, "y":this.y, "id":this.id, "speedX":this.speedX, "speedY":this.speedY,
     "up":this.up, "down":this.down, "left":this.left, "right":this.right, "mass":this.mass,
     "health":this.health, "tHealth":this.tHealth, "points":this.points, "speed":this.speed,

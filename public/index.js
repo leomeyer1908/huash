@@ -289,6 +289,7 @@ function gameLoop() {
     ctx.font = "20px Arial";
     ctx.fillStyle = "black";
     ctx.fillText("Leaderboard",window.getWidthOfText("Leaderboard", "arial", "20px")*0.42 + clientWidth*0.84,clientHeight*0.05);
+    sortLeaderboard(8);
     //show position
     ctx.font = "25px ComicSans";
     ctx.fillStyle = "rgba(255,255,255,0.8)";

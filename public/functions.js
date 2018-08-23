@@ -416,3 +416,31 @@ function edgeFix() {
         }
     }
 }
+
+function sortLeaderboard(numPlayers) {
+  var tmpUserScore = [];
+  for (var i = 0; i < users.length; i++) {
+    tmpUserScore.push(users[i].kills);
+  }
+  for (var i = 0; i < numPlayers; i++) {
+    var tmpHighScore = null;
+    var tmpHighestUserNum = 0;
+    for (var j = 0; j < tmpUserScore.length; j++) {
+      if (tmpHighScore == null || tmpHighScore == undefined) {
+        tmpHighScore = tmpUserScore[j];
+        tmpHighestUserNum = j;
+      } else if (tmpUserScore[j] > tmpHighScore) {
+        tmpHighScore = tmpUserScore[j];
+        tmpHighestUserNum = j;
+      }
+    }
+    if (tmpHighScore != undefined && tmpHighScore != 0) {
+      delete tmpUserScore[tmpHighestUserNum];
+      ctx.fillText(i+1 + ". " + users[tmpHighestUserNum].name,
+       clientWidth*0.85,
+       clientHeight*0.04*(i+2)+clientHeight*0.02
+      );
+      ctx.fillText(tmpHighScore, clientWidth*0.98, clientHeight*0.04*(i+2)+clientHeight*0.02);
+    }
+  }
+}
