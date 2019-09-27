@@ -5,9 +5,9 @@ var express = require('express'),
     socket = require("socket.io"),
     io = socket.listen(http),
     gameSocket = io.of('game'),
-	loginSocket = io.of('login');
+	  loginSocket = io.of('login');
 
-var port = 8000,
+var port = 8080,
     ip   = '0.0.0.0';
 
 app.use(express.static('public'));
@@ -168,8 +168,8 @@ io.sockets.on('connection', function(socket) {
 	})
 
     //skills
-    socket.on("health", function(co) {
-    	if (players[co] != undefined) {
+  socket.on("health", function(co) {
+    if (players[co] != undefined) {
 			if (players[co].points > 0) {
 				players[co].tHealth += 1;
 				players[co].health += 1;
@@ -190,9 +190,11 @@ io.sockets.on('connection', function(socket) {
 	socket.on("speed", function(co) {
 		if (players[co] != undefined) {
 			if (players[co].points > 0) {
-				players[co].speed += 1;
-				players[co].points -= 1;
-				players[co].mass += 1;
+        if (players[co].speed < 30) {
+  				players[co].speed += 1;
+  				players[co].points -= 1;
+  				players[co].mass += 1;
+        }
 			}
 		}
 	})
@@ -203,21 +205,17 @@ io.sockets.on('connection', function(socket) {
             	//p1 = (mousex,mousey), p2 = (players[i].x,players[i].y)
             	//distance formula
 				if (Math.sqrt(Math.pow((mousex - players[i].x),2) + Math.pow((mousey - players[i].y),2)) < players[i].mass) {
-		            if (players[i].tHealth > players[co].damage) {
-						players[i].health -= players[i].tHealth/(players[i].tHealth - players[co].damage);
-					} else {
-						players[i].health = 0;
-					}
-						console.log("thealth: " + players[i].tHealth)
-						console.log("health: " + players[i].health)
-						//death
-					if (players[i].health <= 0) {
-						players[co].points += Math.round((players[i].mass - 40)/2);
-            players[co].kills += 1;
-						delete players[i];
-						//players.splice(i, 1);
-						console.log(players);
-					}
+              players[i].health = players[i].tHealth*(2*players[i].health**3 - players[co].damage**2)/(2*players[i].tHealth**3) // thealth*(2*health^3 - dmg^2)/2*thealth^3
+  						console.log("thealth: " + players[i].tHealth)
+  						console.log("health: " + players[i].health)
+  						//death
+    					if (players[i].health <= 0) {
+    						players[co].points += Math.round((players[i].mass - 40)/2);
+                players[co].kills += 1;
+    						delete players[i];
+    						//players.splice(i, 1);
+    						console.log(players);
+    					}
 		        }
         	}
         }
@@ -230,11 +228,16 @@ io.sockets.on('connection', function(socket) {
             	if (energyOrbs[i].skill == "all") {
             		players[id].points += 1;
             	} else {
-            		players[id][energyOrbs[i].skill] += 1;
-            		if (energyOrbs[i].skill == "health") {
-            			players[id].tHealth += 1;
-            		}
-            		players[id].mass += 1;
+                if (!(energyOrbs[i].skill == "speed" && players[id].speed >= 30)) { //check to see if speed is more than 30
+                  players[id][energyOrbs[i].skill] += 1;
+              		if (energyOrbs[i].skill == "health") {
+              			players[id].tHealth += 1;
+              		}
+              		players[id].mass += 1;
+                }
+                else {
+                  players[id].points += 1;
+                }
             	}
             	energyOrbs.splice(i, 1);
             }

@@ -237,14 +237,18 @@ function gameLoop() {
     drawSkillRect(100,100,document.documentElement.clientWidth/2 + 60,10 - moveSkill,20,"rgba(0, 0, 255, 0.1)");
     ctx.fillStyle = "rgba(255,255,255,0.8)";
     ctx.font = "20px Arial";
-    ctx.fillText("Health",document.documentElement.clientWidth/2 - 140,33 - moveSkill);
-    ctx.fillText("Damage",document.documentElement.clientWidth/2 - 38,33 - moveSkill);
-    ctx.fillText("Speed",document.documentElement.clientWidth/2 + 80,33 - moveSkill);
+    ctx.fillText("Health",document.documentElement.clientWidth/2 - 140,33 - moveSkill); //fr
+    ctx.fillText("Damage",document.documentElement.clientWidth/2 - 38,33 - moveSkill); //fr
+    ctx.fillText("Speed",document.documentElement.clientWidth/2 + 80,33 - moveSkill); //fr
     ctx.font = "40px Arial";
     ctx.fillText(healthPoint,document.documentElement.clientWidth/2 - 110 - (healthDigits*11),75 - moveSkill);
     ctx.fillText(damagePoint,document.documentElement.clientWidth/2 - (damageDigits*11),75 - moveSkill);
     ctx.fillText(speedPoint,document.documentElement.clientWidth/2 + 110 - (speedDigits*11),75 - moveSkill);
 
+    ctx.font = "15px Arial";
+    if (money > 0) {
+      ctx.fillText('Press "space" to upgrade skills (' + money + ' points) ', document.documentElement.clientWidth/2 -135, 130 - moveSkill); //fr
+    }
     if (moveSkill == 0) {
         if (smouseY > 30 && smouseY < 90) {
             if (smouseX > document.documentElement.clientWidth/2 - 160 && smouseX < document.documentElement.clientWidth/2 - 60) {
